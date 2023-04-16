@@ -5,6 +5,7 @@ interface TextareaProps {
   placeholder?: string;
   value: string;
   onHandleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
 export const Textarea = ({
@@ -14,12 +15,13 @@ export const Textarea = ({
   placeholder,
   value,
   onHandleChange,
+  onKeyPress,
 }: TextareaProps): JSX.Element => {
   return (
     <>
       <label
         htmlFor='message'
-        className='block mb-2 text-sm font-medium text-gray-900'
+        className='mb-2 block text-sm font-medium text-gray-900'
       >
         {textLabel}
       </label>
@@ -27,10 +29,11 @@ export const Textarea = ({
         id={name}
         name={name}
         rows={rows}
-        className='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 '
+        className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 '
         placeholder={placeholder}
         value={value}
         onChange={onHandleChange}
+        onKeyUp={onKeyPress}
       ></textarea>
     </>
   );

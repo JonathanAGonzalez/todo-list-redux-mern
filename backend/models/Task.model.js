@@ -16,16 +16,16 @@ const taskSchema = new mongoose.Schema(
       default: false,
     },
     createdAt: {
-      type: Date,
-      default: dayjs().millisecond(),
+      type: String,
+      default: new Date().toLocaleDateString(),
     },
     updatedAt: {
-      type: Date,
-      default: dayjs().millisecond(),
+      type: String,
+      default: new Date().toLocaleDateString(),
     },
     userId: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   { timestamps: true }

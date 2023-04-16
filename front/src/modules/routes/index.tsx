@@ -1,11 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { Home } from '../../pages/home';
+import Login from '../../pages/login';
 
 const routes = [
   {
     path: '/',
     Component: Home,
+    id: uuid(),
+  },
+  {
+    path: '/login',
+    Component: Login,
     id: uuid(),
   },
 ];

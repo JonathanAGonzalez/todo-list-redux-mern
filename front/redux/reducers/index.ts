@@ -1,9 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import getAllTaskSlice from '../slices/getAllTask.slices';
-import addTaskSlice from '../slices/addTask.slices';
+import taskSlice from '../slices/task.slices';
+import userSlice from '../slices/user.slices';
+
 
 
 export const rootReducer = combineReducers({
-    getAllTaskSlice,
-    addTaskSlice
+    taskSlice,
+    userSlice
 })

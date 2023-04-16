@@ -5,7 +5,7 @@ interface TextareaProps {
   placeholder?: string;
   value: string;
   onHandleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onKeyPress?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLTextAreaElement> | any) => void;
 }
 
 export const Textarea = ({

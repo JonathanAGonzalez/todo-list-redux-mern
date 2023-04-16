@@ -20,7 +20,7 @@ export default function Login() {
           </div>
           <div className='mb-2'>
             <label
-              for='password'
+              htmlFor='password'
               className='block text-sm font-semibold text-gray-800'
             >
               Password

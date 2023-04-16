@@ -1,54 +1,134 @@
-import { useDispatch } from 'react-redux';
-import { addTaskSuccess } from '../../../../redux/slices/addTask.slices';
-import { useValuesForm } from '../../../hooks/useValuesForm';
+import { useSelector } from 'react-redux';
 import { Input } from '../../../modules/common/components/Input';
 import { Textarea } from '../../../modules/common/components/Textarea';
+import {
+  isLoadingAdd,
+  isLoadingEdit,
+} from '../../../../redux/selectors/tasks.selector';
+import { Spinner } from '../../../modules/core/components/Spinner';
+import { Task } from '../../../../types/user';
 
-export const Form = () => {
-  const initialState = {
-    title: '',
-    task: '',
-  };
+interface EditValues {
+  values: Task;
+  editValues: Boolean;
+  onHandleValues: (e: any) => void;
+  resetValues: () => void;
+  onSubmit: any;
+  setEditMode: (prev: any) => void;
+  onKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+}
 
-  const { handleValues, resetValues, values } = useValuesForm(initialState);
-  const dispatch = useDispatch();
+export const Form = ({
+  values,
+  editValues,
+  onHandleValues,
+  resetValues,
+  onSubmit,
+  setEditMode,
+  onKeyPress,
+}: EditValues) => {
+  const loadingAdd = useSelector(isLoadingAdd);
+  const loadingEdit = useSelector(isLoadingEdit);
 
   return (
-    <form action='' className='w-2/5 m-auto mt-20'>
+    <form className=' m-auto w-1/2' onSubmit={onSubmit}>
       <Input
         labelText='Title task'
         name='title'
         type='text'
         placeholder='Title task'
-        value={values.title}
+        value={values?.title}
         variant='filled'
         autocomplete='off'
-        onHandleChange={handleValues}
+        onHandleChange={onHandleValues}
+        onKeyPress={onKeyPress}
       />
 
       <Textarea
-        name='task'
+        name='description'
         rows={4}
         placeholder='Learn MongoDB'
-        value={values.task}
-        onHandleChange={handleValues}
+        value={values?.description}
+        onHandleChange={onHandleValues}
+        onKeyPress={onKeyPress}
       />
 
-      <button
-        type='button'
-        onClick={() => {
-          resetValues();
-          dispatch(
-            addTaskSuccess({
-              title: values.title,
-              task: values.task,
-            })
-          );
-        }}
-        className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-2'
-      >
-        Agregar
-      </button>
+      <div className='flex'>
+        {editValues && (
+          <button
+            type='button'
+            onClick={() => {
+              setEditMode((prev: boolean) => !prev);
+              resetValues();
+            }}
+            disabled={loadingAdd}
+            className='
+         mr-2
+         mb-2
+         mt-2
+         flex
+         items-center
+         justify-center
+         gap-4
+         rounded-lg
+          bg-blue-700
+          px-5
+         py-2.5
+         text-sm
+         font-medium
+         text-white
+         hover:bg-blue-800
+         focus:outline-none
+         focus:ring-2
+         focus:ring-blue-300
+         disabled:cursor-progress
+         disabled:opacity-70
+        disabled:hover:bg-blue-700
+        dark:bg-blue-600
+        dark:focus:ring-blue-800
+         '
+          >
+            Cancel
+          </button>
+        )}
+        <button
+          type='button'
+          disabled={loadingAdd}
+          onClick={onSubmit}
+          className={`
+         mr-2
+         mb-2
+         mt-2
+         flex
+         items-center
+         justify-center
+         gap-4
+         rounded-lg
+          ${editValues ? 'bg-blue-900' : 'bg-blue-700'} ,
+          px-5
+         py-2.5
+         text-sm
+         font-medium
+         text-white
+         hover:bg-blue-800
+         focus:outline-none
+         focus:ring-2
+         focus:ring-blue-300
+         disabled:cursor-progress
+         disabled:opacity-70
+        disabled:hover:bg-blue-700
+         `}
+        >
+          {editValues
+            ? 'Editar'
+            : loadingEdit
+            ? 'Editando...'
+            : loadingAdd
+            ? 'Agregando...'
+            : 'Agregar'}
+          {loadingAdd || (loadingEdit && <Spinner />)}
+        </button>
+      </div>
     </form>
   );
 };

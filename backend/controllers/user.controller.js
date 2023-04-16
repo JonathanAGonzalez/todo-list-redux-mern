@@ -29,8 +29,7 @@ const updateUser = async (req, res) => {
 
     if (user) {
       user.name = req.body.name;
-      user.password = req.body.password;
-      await user.save();
+      user.email = req.body.email;
 
       res.status(200).json(user);
     } else {
@@ -54,4 +53,28 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUsers, updateUser, deleteUser };
+const changePassword = async (req, res) => {
+  const { password } = req.body;
+
+  try {
+    const user = await User.findOne({ email: req.params.email });
+
+    if (user) {
+      user.password = password;
+      await user.save();
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  createUser,
+  getUsers,
+  updateUser,
+  deleteUser,
+  changePassword,
+};

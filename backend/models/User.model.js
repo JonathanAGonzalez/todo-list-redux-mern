@@ -1,5 +1,5 @@
-const dayjs = require('dayjs');
 const { mongoose } = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema(
   {
@@ -26,25 +26,28 @@ const userSchema = new mongoose.Schema(
     createdAt: {
       type: String,
       required: true,
-      default: dayjs().millisecond(),
+      default: new Date().getFullYear,
     },
     updatedAt: {
       type: String,
       required: true,
-      default: dayjs().millisecond(),
+      default: new Date().getFullYear,
     },
   },
   { timestamps: true }
 );
 
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) next();
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+userSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compareSync(password, this.password);
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
-
-// export interface User {
-//   id: string;
-//   name: string;
-//   email: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }

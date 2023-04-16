@@ -9,6 +9,21 @@ const getAllTask = async (req, res) => {
   }
 };
 
+const getByUser = async (req, res) => {
+  const { userID } = req.params;
+
+  console.log(userID);
+
+  try {
+    const tasks = await Task.find({
+      userId: userID,
+    });
+    res.json(tasks);
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
 const createTask = async (req, res) => {
   try {
     const task = new Task(req.body);
@@ -26,6 +41,7 @@ const updateTask = async (req, res) => {
     if (task) {
       task.title = req.body.title;
       task.description = req.body.description;
+      task.status = req.body.status;
       await task.save();
 
       res.status(200).json(task);
@@ -39,7 +55,7 @@ const deleteTask = async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({ _id: req.params.id });
     if (task) {
-      res.status(200).json({ message: 'task deleted successfully', task });
+      res.status(200).json({ success: true });
     } else {
       res.status(404).json({ message: 'task not found' });
     }
@@ -53,4 +69,5 @@ module.exports = {
   createTask,
   updateTask,
   deleteTask,
+  getByUser,
 };

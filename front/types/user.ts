@@ -11,9 +11,10 @@ export interface Task {
     id: string,
     title: string,
     description: string,
-    status: string,
+    status: boolean,
     createdAt: string,
     updatedAt: string,
     userId: string,
     user: User
+    _id: string
 }
